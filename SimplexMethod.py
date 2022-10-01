@@ -28,7 +28,5 @@ def execute(objectiveFunction, constraintMatrix, bVector, isMaxProblem, needFirs
   for variable in nonBaseVariables:
     print(f"\tx{variable}* = 0")
 
-
-  
 def executePhase2(function, constraints, isMaxProblem):
   tableau = utils.createTableau(function, constraints, isMaxProblem)

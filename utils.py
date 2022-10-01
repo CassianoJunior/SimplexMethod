@@ -122,7 +122,6 @@ def pivoting(tableau, inputVariable, outputVariable):
   constraints = getTableauConstraints(tableau)
   baseVariables = getBaseVariables(tableau, constraints)
 
-  print(baseVariables)
   tableau = generatingIdentitySubmatrix(tableau, baseVariables)
   tableau = expressObjectiveFunctionWithNonBasicVariables(tableau, baseVariables)
   
