@@ -1,18 +1,36 @@
 import SimplexMethod
+import utils
 
 if __name__ ==  '__main__':
   # Make sure the input is in standard form before calling the SimplexMethod
-  SimplexMethod.execute(
-    objectiveFunction = [-2, -1, 1, 0, 0], # objective function
+  tableau = SimplexMethod.execute(
+    objectiveFunction = [330, 300, 420, 0, 0, 0, 0, 0], # objective function
     constraintMatrix = [ # constraint matrix
-      [1, 1, 2, 1, 0], 
-      [1, 4, -1, 0, 1]
+      [5.1, 3.6, 6.8, 1, 0, 0, 0, 0], 
+      [2, 0, 0, 0, 1, 0, 0, 0], 
+      [0, 2, 0, 0, 0, 1, 0, 0],
+      [0, 0, 2, 0, 0, 0, 1, 0],
+      [1, (3/4), (5/3), 0, 0, 0, 0, 1]
     ], 
     bVector = [ #Vector b
-      [6], 
-      [4]
+      [220], 
+      [40], 
+      [30],
+      [10],
+      [40]
     ], 
-    isMaxProblem=False,
+    isMaxProblem=True,
     needFirstPhase=False
   )
+
+  # Output:
+  print("Best solution: Z* = ", tableau[len(tableau)-1][len(tableau[0])-1])
+  print("Base variables: ")
+  baseVariables = utils.getBaseVariables(tableau, utils.getTableauConstraints(tableau))
+  nonBaseVariables = utils.getNonBaseVariables(tableau)
+  for variable in baseVariables:
+    print(f"  x{variable}* = {tableau[baseVariables.index(variable)+1][len(tableau[0])-1]}")
+  print("Non-base variables: ")
+  for variable in nonBaseVariables:
+    print(f"  x{variable}* = 0")
 

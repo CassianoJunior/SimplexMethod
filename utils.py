@@ -1,7 +1,15 @@
 import re
 
 
-def createTableau(objectiveFunction, constraintMatrix, bVector, isMaxProblem = False, needFirstPhase=False):
+def createTableau(objectiveFunction, constraintMatrix, bVector, isMaxProblem, needFirstPhase):
+  if not needFirstPhase:
+    tableau = createTableauToSecondPhase(objectiveFunction, constraintMatrix, bVector, isMaxProblem)
+  else: 
+    tableau = createTableauToFirstPhase(objectiveFunction, constraintMatrix, bVector, isMaxProblem)
+
+  return tableau
+  
+def createTableauToSecondPhase(objectiveFunction, constraintMatrix, bVector, isMaxProblem):
   if isMaxProblem: objectiveFunction = [-1 * x for x in objectiveFunction]
 
   sizeOfConstraints = len(constraintMatrix)
@@ -34,7 +42,10 @@ def createTableau(objectiveFunction, constraintMatrix, bVector, isMaxProblem = F
       if column == len(tableau[line]) - 1 and line == sizeOfConstraints+1: tableau[line][column] = 0
   
   return tableau
-  
+
+def createTableauToFirstPhase():
+  pass
+
 def toCanonicForm(tableau):
   constraints = getTableauConstraints(tableau)
   baseVariables = getBaseVariables(tableau, constraints)
@@ -99,6 +110,7 @@ def checkOptimality(tableau):
   objectiveFunctionLine = len(tableau) - 1
   for column in range(1, len(tableau[0])-1):
     if tableau[objectiveFunctionLine][column] < 0: return False, column
+
   return True, None
 
 def getOutputVariable(tableau, inputVariable):
@@ -119,17 +131,13 @@ def getOutputVariable(tableau, inputVariable):
 def pivoting(tableau, inputVariable, outputVariable):
   tableau[outputVariable][0] = "x" + str(inputVariable)
 
-  constraints = getTableauConstraints(tableau)
-  baseVariables = getBaseVariables(tableau, constraints)
-
-  tableau = generatingIdentitySubmatrix(tableau, baseVariables)
-  tableau = expressObjectiveFunctionWithNonBasicVariables(tableau, baseVariables)
+  tableau = toCanonicForm(tableau)
   
   return tableau
 
 def showTableau(tableau):
   for i in range(len(tableau)):
     for j in range(len(tableau[i])):
-      print("%5.1f" %tableau[i][j], end=" ") if type(tableau[i][j]) is not str else print("%5s" %tableau[i][j], end=" ")
+      print("%7.1f" %tableau[i][j], end=" ") if type(tableau[i][j]) is not str else print("%7s" %tableau[i][j], end=" ")
     print()
   print()
