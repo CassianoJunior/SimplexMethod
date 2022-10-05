@@ -135,6 +135,21 @@ def pivoting(tableau, inputVariable, outputVariable):
   
   return tableau
 
+def checkUnboundedness(tableau, inputVariable):
+  for line in range(1, len(tableau)-1):
+    if tableau[line][inputVariable] > 0: return False
+
+  return True
+
+def checkEndless(tableau):
+  nonBaseVariables = getNonBaseVariables(tableau)
+  objectiveFunctionLine = len(tableau) - 1
+  hasZero = False
+  for variable in nonBaseVariables:
+    if tableau[objectiveFunctionLine][variable] == 0: hasZero = True
+  
+  return hasZero
+
 def showTableau(tableau):
   for i in range(len(tableau)):
     for j in range(len(tableau[i])):
